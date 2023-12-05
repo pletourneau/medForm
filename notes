@@ -1,3 +1,85 @@
+// To access the data from other components like Drugs, you need to manage the state of that data in a shared parent component. One way to handle this is by lifting the state up to a common ancestor component that renders both Drugs and Summary. Here's an example of how you might do this:
+
+javascript
+Copy code
+import React, { useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Drugs from "./Drugs";
+import Summary from "./Summary";
+
+function App() {
+  const [drugData, setDrugData] = useState({
+    isSmoker: "",
+    isTryingToQuit: "",
+    // other fields...
+  });
+
+  const handleDrugData = (data) => {
+    setDrugData(data);
+  };
+
+  return (
+    <Router>
+      <Routes>
+        <Route
+          path="/drugs"
+          element={<Drugs handleDrugData={handleDrugData} />}
+        />
+        <Route
+          path="/summary"
+          element={<Summary drugData={drugData} />}
+        />
+        {/* other routes... */}
+      </Routes>
+    </Router>
+  );
+}
+
+export default App;
+// In the above code, App is the parent component that holds the state for drugData and passes it down to the Summary component via props.
+
+// Then, in your Drugs component, when you need to update the drugData, you can call the handleDrugData function passed as a prop:
+
+// javascript
+// Copy code
+function Drugs({ handleDrugData }) {
+  // ...your component logic
+
+  // when you want to update drugData, call handleDrugData
+  // for example, after setting the values in handleOptionChange
+  const handleOptionChange = (name, value) => {
+    setDrugData((prevData) => ({ ...prevData, [name]: value }));
+    handleDrugData(drugData); // pass the updated drugData to the parent
+  };
+
+  // ...rest of your component
+}
+// Finally, in your Summary component, you can access the drugData via props:
+
+// javascript
+// Copy code
+function Summary({ drugData }) {
+  return (
+    <div>
+      <p>Is Smoker: {drugData.isSmoker}</p>
+      <p>Is Trying to Quit: {drugData.isTryingToQuit}</p>
+      {/* other data... */}
+    </div>
+  );
+}
+
+export default Summary;
+This structure allows you to manage shared state at a higher level (App) and pass relevant state and functions down to child components (Drugs, Summary) through props.
+
+
+
+
+
+
+
+
+
+
 // /src
 //   /components
 //     /Form
@@ -312,3 +394,39 @@ export default Smoking;
 // }
 // console.log(Smoking);
 // export default Smoking;
+
+import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
+import db from "../firebase.js";
+import { collection, addDoc } from "firebase/firestore";
+
+function Smoking() {
+  const history = useHistory(); // Initialize the useHistory hook
+
+  const [formData, setFormData] = useState({
+    isSmoker: null,
+    isTryingToQuit: null,
+    isHarmReduxYes: null,
+  });
+
+  const handleOptionChange = (name, value) => {
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
+  const handleSubmit = async () => {
+    // Your form submission logic
+    await addDoc(collection(db, "patient"), formData);
+
+    // Navigate to the next page after successful form submission
+    history.push("/next-page");
+  };
+
+  return (
+    <div>
+      {/* Your form JSX */}
+      <button onClick={handleSubmit}>Submit</button>
+    </div>
+  );
+}
+
+export default Smoking;
