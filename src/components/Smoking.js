@@ -1,105 +1,6 @@
-// import React, { useState } from "react";
-
-// function Smoking() {
-//   const [isYesSelected, setIsYesSelected] = useState(null);
-//   const [isTryingToQuit, setIsTryingToQuit] = useState(null);
-//   const [isHarmReduxYes, setIsHarmReduxYes] = useState(null);
-
-//   const handleOptionChange = (value) => {
-//     setIsYesSelected(value);
-//   };
-//   const handleOtherOptionChange = (value) => {
-//     setIsTryingToQuit(value);
-//   };
-//   const handleThirdOptionChange = (value) => {
-//     setIsHarmReduxYes(value);
-//   };
-
-//   return (
-//     <div>
-//       <p>Are you a smoker?</p>
-//       <label>
-//         <input
-//           type="radio"
-//           name="smokingOption"
-//           value="yes"
-//           checked={isYesSelected === "yes"}
-//           onChange={() => handleOptionChange("yes")}
-//         />
-//         Yes
-//       </label>
-
-//       <label>
-//         <input
-//           type="radio"
-//           name="smokingOption"
-//           value="no"
-//           checked={isYesSelected === "no"}
-//           onChange={() => handleOptionChange("no")}
-//         />
-//         No
-//       </label>
-
-//       {isYesSelected === "yes" ? (
-//         <div>
-//           <p>Are you trying to quit?</p>
-//           <label>
-//             <input
-//               type="radio"
-//               name="quittingOption"
-//               value="yes"
-//               checked={isTryingToQuit === "yes"}
-//               onChange={() => handleOtherOptionChange("yes")}
-//             />
-//             Yes
-//           </label>
-
-//           <label>
-//             <input
-//               type="radio"
-//               name="quittingOption"
-//               value="no"
-//               checked={isTryingToQuit === "no"}
-//               onChange={() => handleOtherOptionChange("no")}
-//             />
-//             No
-//           </label>
-
-//           {isTryingToQuit === "yes" ? (
-//             <div>
-//               <p>Do you need assistance in quitting or harm reduction??</p>
-//               <label>
-//                 <input
-//                   type="radio"
-//                   name="harmRedux"
-//                   value="yes"
-//                   checked={isHarmReduxYes === "yes"}
-//                   onChange={() => handleThirdOptionChange("yes")}
-//                 />
-//                 Yes
-//               </label>
-
-//               <label>
-//                 <input
-//                   type="radio"
-//                   name="harmRedux"
-//                   value="no"
-//                   checked={isHarmReduxYes === "no"}
-//                   onChange={() => handleThirdOptionChange("no")}
-//                 />
-//                 No
-//               </label>
-//             </div>
-//           ) : null}
-//         </div>
-//       ) : null}
-//     </div>
-//   );
-// }
-// console.log(Smoking);
-// export default Smoking;
-
 import React, { useState } from "react";
+import db from "../firebase.js";
+import { collection, addDoc } from "firebase/firestore";
 
 function Smoking() {
   const [formData, setFormData] = useState({
@@ -112,6 +13,25 @@ function Smoking() {
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
+  const handleSubmit = async () => {
+    // Check if all required fields are filled before submitting
+    // if (formData.isSmoker === null || formData.isTryingToQuit === null) {
+    //   alert("Please answer all questions before submitting.");
+    //   return;
+    // }
+
+    // Create "patient" collection
+    const patientCollection = collection(db, "patient");
+
+    try {
+      // Add the form data to Firestore
+      const docRef = await addDoc(patientCollection, formData);
+      console.log("Document written with ID: ", docRef.id);
+    } catch (error) {
+      console.error("Error adding document: ", error);
+    }
+  };
+
   return (
     <div>
       <p>Are you a smoker?</p>
@@ -121,7 +41,9 @@ function Smoking() {
           name="isSmoker"
           value="yes"
           checked={formData.isSmoker === "yes"}
-          onChange={() => handleOptionChange("isSmoker", "yes")}
+          onChange={(event) =>
+            handleOptionChange("isSmoker", event.target.value)
+          }
         />
         Yes
       </label>
@@ -132,7 +54,9 @@ function Smoking() {
           name="isSmoker"
           value="no"
           checked={formData.isSmoker === "no"}
-          onChange={() => handleOptionChange("isSmoker", "no")}
+          onChange={(event) =>
+            handleOptionChange("isSmoker", event.target.value)
+          }
         />
         No
       </label>
@@ -146,7 +70,9 @@ function Smoking() {
               name="isTryingToQuit"
               value="yes"
               checked={formData.isTryingToQuit === "yes"}
-              onChange={() => handleOptionChange("isTryingToQuit", "yes")}
+              onChange={(event) =>
+                handleOptionChange("isTryingToQuit", event.target.value)
+              }
             />
             Yes
           </label>
@@ -157,21 +83,25 @@ function Smoking() {
               name="isTryingToQuit"
               value="no"
               checked={formData.isTryingToQuit === "no"}
-              onChange={() => handleOptionChange("isTryingToQuit", "no")}
+              onChange={(event) =>
+                handleOptionChange("isTryingToQuit", event.target.value)
+              }
             />
             No
           </label>
 
           {formData.isTryingToQuit === "yes" && (
             <div>
-              <p>Do you need assistance in quitting or harm reduction??</p>
+              <p>Do you need assistance in quitting or harm reduction?</p>
               <label>
                 <input
                   type="radio"
                   name="isHarmReduxYes"
                   value="yes"
                   checked={formData.isHarmReduxYes === "yes"}
-                  onChange={() => handleOptionChange("isHarmReduxYes", "yes")}
+                  onChange={(event) =>
+                    handleOptionChange("isHarmReduxYes", event.target.value)
+                  }
                 />
                 Yes
               </label>
@@ -182,7 +112,9 @@ function Smoking() {
                   name="isHarmReduxYes"
                   value="no"
                   checked={formData.isHarmReduxYes === "no"}
-                  onChange={() => handleOptionChange("isHarmReduxYes", "no")}
+                  onChange={(event) =>
+                    handleOptionChange("isHarmReduxYes", event.target.value)
+                  }
                 />
                 No
               </label>
@@ -190,10 +122,13 @@ function Smoking() {
           )}
         </div>
       )}
+
       <div>
         <p>Form Data:</p>
         <pre>{JSON.stringify(formData, null, 2)}</pre>
       </div>
+
+      <button onClick={handleSubmit}>Submit</button>
     </div>
   );
 }
