@@ -1,26 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 // import db from "../firebase.js";
 
 function Drugs({ patientData, setPatientData, handlePatientData }) {
-  // const [patientData, setpatientData] = useState({
-  //   isSmoker: null,
-  //   isTryingToQuit: null,
-  //   isHarmReduxYes: null,
-  //   isDrugs: null,
-  //   otherDrugs: null,
-  //   isTryingToQuitDrugs: null,
-  //   isHarmReduxYesDrugs: null,
-  // });
-
-  // const handleOptionChange = (name, value) => {
-  //   setpatientData((prevData) => ({ ...prevData, [name]: value }));
-  // };
-
   const handleOptionChange = (name, value) => {
-    setPatientData((prevData) => ({ ...prevData, [name]: value }));
-    handlePatientData(patientData);
+    setPatientData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
+
+  useEffect(() => {
+    handlePatientData(patientData);
+  }, [patientData, handlePatientData]);
 
   return (
     <div>
@@ -38,7 +30,6 @@ function Drugs({ patientData, setPatientData, handlePatientData }) {
           />
           Yes
         </label>
-
         <label>
           <input
             type="radio"
@@ -51,7 +42,6 @@ function Drugs({ patientData, setPatientData, handlePatientData }) {
           />
           No
         </label>
-
         {patientData.isSmoker === "yes" && (
           <div>
             <p>Are you trying to quit?</p>

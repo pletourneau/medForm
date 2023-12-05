@@ -5,7 +5,7 @@ import Lifestyle from "./components/Lifestyle";
 import Contact from "./components/Contact";
 import Summary from "./components/Summary";
 import React, { useState } from "react";
-// import React from "react";
+
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 function App() {
@@ -31,7 +31,6 @@ function App() {
           <Route path="/Contact" element={<Contact />} />
           <Route
             path="/Drugs"
-            // element={<Drugs handlePatientData={handlePatientData} />}
             element={
               <Drugs
                 patientData={patientData}
@@ -41,7 +40,10 @@ function App() {
             }
           />
           <Route path="/Lifestyle" element={<Lifestyle />} />
-          <Route path="/Summary" element={<Summary />} />
+          <Route
+            path="/Summary"
+            element={<Summary patientData={patientData} />}
+          />
         </Routes>
       </Router>
     </React.Fragment>

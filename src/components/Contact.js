@@ -13,25 +13,23 @@ const Contact = () => {
   });
 
   const validateFirstName = (value) => {
-    return /^[^\d]+$/.test(value); // For example, require at least one character
+    return /^[^\d]+$/.test(value);
   };
 
   const validateLastName = (value) => {
-    return /^[^\d]+$/.test(value); // For example, require at least one character
+    return /^[^\d]+$/.test(value);
   };
 
   const validateDateOfBirth = (value) => {
-    return value !== null; // For example, require a selected date
+    return value !== null;
   };
 
   const validatePhoneNumber = (value) => {
     return /^\D?(\d{3})\D?\D?(\d{3})\D?(\d{4})$/.test(value);
-    // Example regex for US phone number format (XXX-XXX-XXXX or (XXX) XXX-XXXX)
   };
 
   const validateEmail = (value) => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-    // Example regex for basic email format
   };
 
   const handleContactData = (name, value) => {
@@ -60,12 +58,12 @@ const Contact = () => {
     if (name === "dateOfBirth") {
       setContactData((prevData) => ({
         ...prevData,
-        dateOfBirth: { value, isValid }, // Update dateOfBirth directly with a Date object
+        dateOfBirth: { value, isValid },
       }));
     } else {
       setContactData((prevData) => ({
         ...prevData,
-        [name]: { value, isValid }, // Update value and validity for other fields
+        [name]: { value, isValid },
       }));
     }
   };
@@ -78,7 +76,7 @@ const Contact = () => {
         return;
       }
     }
-    navigate("/Lifestyle"); // Navigate to the next page if all fields are valid
+    navigate("/Lifestyle");
   };
 
   return (
