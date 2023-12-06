@@ -3,7 +3,12 @@ import { useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-const Contact = ({ patientData, setPatientData, handlePatientData }) => {
+const Contact = ({
+  patientData,
+  setPatientData,
+  handlePatientData,
+  // updateOverallProgress,
+}) => {
   const navigate = useNavigate();
 
   const validateFirstName = (value) => {
@@ -49,10 +54,6 @@ const Contact = ({ patientData, setPatientData, handlePatientData }) => {
         break;
     }
 
-    // setPatientData((prevData) => ({
-    //   ...prevData,
-    //   [name]: { value, isValid },
-    // }));
     if (name === "dateOfBirth") {
       setPatientData((prevData) => ({
         ...prevData,
@@ -65,18 +66,18 @@ const Contact = ({ patientData, setPatientData, handlePatientData }) => {
       }));
     }
   };
-  // || patientData[key].value === ""
+
   const checkAllValidations = () => {
     for (const key in patientData) {
       if (!patientData[key].isValid) {
-        console.log(patientData[key].value);
         alert("Not all questions are correctly completed");
         return;
       }
     }
-    handlePatientData(patientData);
-    navigate("/Lifestyle");
-    // Include additional logic if needed
+
+    // If all validations pass, update the progress and navigate to the next page
+    // updateOverallProgress("Drugs"); // Assuming the next page is "Drugs"
+    navigate("/Drugs");
   };
 
   return (
@@ -117,13 +118,13 @@ const Contact = ({ patientData, setPatientData, handlePatientData }) => {
           selected={
             patientData.dateOfBirth.value
               ? new Date(patientData.dateOfBirth.value)
-              : new Date("01/01/1980")
+              : new Date("01/01/1900")
           }
           onChange={(date) => handlepatientData("dateOfBirth", date)}
           dateFormat="MM/dd/yyyy"
           showYearDropdown
           scrollableYearDropdown
-          yearDropdownItemNumber={100}
+          yearDropdownItemNumber={150}
         />
       </label>
       {!patientData.dateOfBirth.isValid && (

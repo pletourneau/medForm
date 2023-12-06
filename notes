@@ -22,6 +22,7 @@ function Contact({ patientData, setPatientData, handlePatientData }) {
   //   phoneNumber: { value: "", isValid: true },
   //   email: { value: "", isValid: true },
   // });
+  const navigate = useNavigate();
 
   const validateFirstName = (value) => {
     return /^[^\d]+$/.test(value);
@@ -78,7 +79,6 @@ function Contact({ patientData, setPatientData, handlePatientData }) {
       }));
     }
   };
-  const navigate = useNavigate();
 
   const checkAllValidations = () => {
     for (const key in patientData) {

@@ -1,8 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-// import db from "../firebase.js";
 
-function Drugs({ patientData, setPatientData, handlePatientData }) {
+function Drugs({
+  patientData,
+  setPatientData,
+  handlePatientData,
+  // updateOverallProgress,
+}) {
   const handleOptionChange = (name, value) => {
     setPatientData((prevData) => ({
       ...prevData,
@@ -139,7 +143,7 @@ function Drugs({ patientData, setPatientData, handlePatientData }) {
                 type="text"
                 placeholder="list other drugs here"
                 name="otherDrugs"
-                value={patientData.otherDrugs}
+                value={patientData.otherDrugs.value}
                 onChange={(event) =>
                   handleOptionChange("otherDrugs", event.target.value)
                 }
@@ -212,13 +216,12 @@ function Drugs({ patientData, setPatientData, handlePatientData }) {
         )}
       </div>
       <div>
-        <Link to="/Lifestyle">Prev</Link>
+        <Link to="/Contact">Prev</Link>
       </div>
       <div>
+        {/* <Link to="/Summary" onClick={() => updateOverallProgress("Summary")}> */}
         <Link to="/Summary">Next</Link>
       </div>
-
-      {/* <button onClick={handleSubmit}>Submit</button> */}
     </div>
   );
 }

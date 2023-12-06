@@ -1,19 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 
-function Lifestyle() {
-  const [lifestyleData, setLifestyleData] = useState({
-    isExercise: null,
-    minWk: null,
-    exTypes: null,
-    isSex: null,
-    isSexQ: null,
-    sexQ: null,
-  });
-
+function Lifestyle({
+  patientData,
+  setPatientData,
+  handlePatientData,
+  updateOverallProgress,
+}) {
   const handleOptionChange = (name, value) => {
-    setLifestyleData((prevData) => ({ ...prevData, [name]: value }));
+    setPatientData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
+
+  useEffect(() => {
+    handlePatientData(patientData);
+  }, [patientData, handlePatientData]);
 
   return (
     <div>
@@ -24,7 +27,7 @@ function Lifestyle() {
             type="radio"
             name="isExercise"
             value="yes"
-            checked={lifestyleData.isExercise === "yes"}
+            checked={patientData.isExercise === "yes"}
             onChange={(event) =>
               handleOptionChange("isExercise", event.target.value)
             }
@@ -37,7 +40,7 @@ function Lifestyle() {
             type="radio"
             name="isExercise"
             value="no"
-            checked={lifestyleData.isExercise === "no"}
+            checked={patientData.isExercise === "no"}
             onChange={(event) =>
               handleOptionChange("isExercise", event.target.value)
             }
@@ -45,14 +48,14 @@ function Lifestyle() {
           No
         </label>
 
-        {lifestyleData.isExercise === "yes" && (
+        {patientData.isExercise === "yes" && (
           <div>
             <p>How many hours per week do you exercise?</p>
             <label>
               <input
                 type="number"
                 name="minWk"
-                value={lifestyleData.minWk}
+                value={patientData.minWk}
                 onChange={(event) =>
                   handleOptionChange("minWk", event.target.value)
                 }
@@ -63,7 +66,8 @@ function Lifestyle() {
               <input
                 type="text"
                 name="exTypes"
-                value={lifestyleData.exTypes}
+                placeholder="list exercises here"
+                value={patientData.exTypes.value}
                 onChange={(event) =>
                   handleOptionChange("exTypes", event.target.value)
                 }
@@ -79,7 +83,7 @@ function Lifestyle() {
             type="radio"
             name="isSex"
             value="yes"
-            checked={lifestyleData.isSex === "yes"}
+            checked={patientData.isSex === "yes"}
             onChange={(event) =>
               handleOptionChange("isSex", event.target.value)
             }
@@ -92,7 +96,7 @@ function Lifestyle() {
             type="radio"
             name="isSex"
             value="no"
-            checked={lifestyleData.isSex === "no"}
+            checked={patientData.isSex === "no"}
             onChange={(event) =>
               handleOptionChange("isSex", event.target.value)
             }
@@ -100,7 +104,7 @@ function Lifestyle() {
           No
         </label>
 
-        {lifestyleData.isSex === "yes" && (
+        {patientData.isSex === "yes" && (
           <div>
             <p>Do you have any concerns or questions?</p>
             <label>
@@ -108,7 +112,7 @@ function Lifestyle() {
                 type="radio"
                 name="isSexQ"
                 value="yes"
-                checked={lifestyleData.isSexQ === "yes"}
+                checked={patientData.isSexQ === "yes"}
                 onChange={(event) =>
                   handleOptionChange("isSexQ", event.target.value)
                 }
@@ -121,21 +125,21 @@ function Lifestyle() {
                 type="radio"
                 name="isSexQ"
                 value="no"
-                checked={lifestyleData.isSexQ === "no"}
+                checked={patientData.isSexQ === "no"}
                 onChange={(event) =>
                   handleOptionChange("isSexQ", event.target.value)
                 }
               />
               No
             </label>
-            {lifestyleData.isSexQ === "yes" && (
+            {patientData.isSexQ === "yes" && (
               <div>
                 <label>
                   <input
                     type="text"
                     placeholder="list concerns here"
                     name="sexQ"
-                    value={lifestyleData.sexQ}
+                    value={patientData.sexQ.value}
                     onChange={(event) =>
                       handleOptionChange("sexQ", event.target.value)
                     }
@@ -150,7 +154,8 @@ function Lifestyle() {
         <Link to="/Contact">Prev</Link>
       </div>
       <div>
-        <Link to="/Drugs">Next</Link>
+        {/* <Link to="/Summary" onClick={() => updateOverallProgress("Summary")}> */}
+        <Link to="/Summary">Next</Link>
       </div>
     </div>
   );
