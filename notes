@@ -1,432 +1,179 @@
-// To access the data from other components like Drugs, you need to manage the state of that data in a shared parent component. One way to handle this is by lifting the state up to a common ancestor component that renders both Drugs and Summary. Here's an example of how you might do this:
+import React from "react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { useNavigate } from "react-router-dom";
 
-javascript
-Copy code
-import React, { useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Drugs from "./Drugs";
-import Summary from "./Summary";
-
-function App() {
-  const [drugData, setDrugData] = useState({
-    isSmoker: "",
-    isTryingToQuit: "",
-    // other fields...
-  });
-
-  const handleDrugData = (data) => {
-    setDrugData(data);
+function Contact({ patientData, setPatientData, handlePatientData }) {
+  const handlepatientData = (name, value, isValid) => {
+    setPatientData((prevData) => ({
+      ...prevData,
+      [name]: { value, isValid },
+    }));
   };
 
-  return (
-    <Router>
-      <Routes>
-        <Route
-          path="/drugs"
-          element={<Drugs handleDrugData={handleDrugData} />}
-        />
-        <Route
-          path="/summary"
-          element={<Summary drugData={drugData} />}
-        />
-        {/* other routes... */}
-      </Routes>
-    </Router>
-  );
-}
+  useEffect(() => {
+    handlePatientData(patientData);
+  }, [patientData, handlePatientData]);
 
-export default App;
-// In the above code, App is the parent component that holds the state for drugData and passes it down to the Summary component via props.
+  // const [patientData, setpatientData] = useState({
+  //   firstName: { value: "", isValid: true },
+  //   lastName: { value: "", isValid: true },
+  //   dateOfBirth: { value: null, isValid: true },
+  //   phoneNumber: { value: "", isValid: true },
+  //   email: { value: "", isValid: true },
+  // });
 
-// Then, in your Drugs component, when you need to update the drugData, you can call the handleDrugData function passed as a prop:
-
-// javascript
-// Copy code
-function Drugs({ handleDrugData }) {
-  // ...your component logic
-
-  // when you want to update drugData, call handleDrugData
-  // for example, after setting the values in handleOptionChange
-  const handleOptionChange = (name, value) => {
-    setDrugData((prevData) => ({ ...prevData, [name]: value }));
-    handleDrugData(drugData); // pass the updated drugData to the parent
+  const validateFirstName = (value) => {
+    return /^[^\d]+$/.test(value);
   };
 
-  // ...rest of your component
-}
-// Finally, in your Summary component, you can access the drugData via props:
+  const validateLastName = (value) => {
+    return /^[^\d]+$/.test(value);
+  };
 
-// javascript
-// Copy code
-function Summary({ drugData }) {
-  return (
-    <div>
-      <p>Is Smoker: {drugData.isSmoker}</p>
-      <p>Is Trying to Quit: {drugData.isTryingToQuit}</p>
-      {/* other data... */}
-    </div>
-  );
-}
+  const validateDateOfBirth = (value) => {
+    return value !== null;
+  };
 
-export default Summary;
-This structure allows you to manage shared state at a higher level (App) and pass relevant state and functions down to child components (Drugs, Summary) through props.
+  const validatePhoneNumber = (value) => {
+    return /^\D?(\d{3})\D?\D?(\d{3})\D?(\d{4})$/.test(value);
+  };
 
+  const validateEmail = (value) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+  };
 
+  const handlepatientData = (name, value) => {
+    let isValid = true;
 
+    switch (name) {
+      case "firstName":
+        isValid = validateFirstName(value);
+        break;
+      case "lastName":
+        isValid = validateLastName(value);
+        break;
+      case "dateOfBirth":
+        isValid = validateDateOfBirth(value);
+        break;
+      case "phoneNumber":
+        isValid = validatePhoneNumber(value);
+        break;
+      case "email":
+        isValid = validateEmail(value);
+        break;
+      default:
+        break;
+    }
 
+    if (name === "dateOfBirth") {
+      setpatientData((prevData) => ({
+        ...prevData,
+        dateOfBirth: { value, isValid },
+      }));
+    } else {
+      setpatientData((prevData) => ({
+        ...prevData,
+        [name]: { value, isValid },
+      }));
+    }
+  };
+  const navigate = useNavigate();
 
+  const checkAllValidations = () => {
+    for (const key in patientData) {
+      if (!patientData[key].isValid || patientData[key].value === "") {
+        alert("Not all questions are correctly completed");
+        return;
+      }
+    }
 
-
-
-
-
-// /src
-//   /components
-//     /Form
-//       PersonalInformation.js
-//       MedicalHistory.js
-//       CurrentSymptoms.js
-//       LifestyleHabits.js
-//       ConsentAgreement.js
-//       Summary.js
-//     App.js
-//     Header.js
-//     Footer.js
-//   /styles
-//     App.css
-//     Form.css
-//   /data
-//     questions.js
-//   /utils
-//     api.js
-//     validations.js
-
-import React, { useState } from "react";
-
-const RadioButton = ({ name, value, checked, onChange, children }) => (
-  <label>
-    <input
-      type="radio"
-      name={name}
-      value={value}
-      checked={checked === value}
-      onChange={() => onChange(value)}
-    />
-    {children}
-  </label>
-);
-
-function Smoking() {
-  const [isYesSelected, setIsYesSelected] = useState(null);
-  const [isTryingToQuit, setIsTryingToQuit] = useState(null);
-  const [isHarmReduxYes, setIsHarmReduxYes] = useState(null);
-
-  return (
-    <div>
-      <p>Are you a smoker?</p>
-      <RadioButton
-        name="smokingOption"
-        value="yes"
-        checked={isYesSelected}
-        onChange={setIsYesSelected}
-      >
-        Yes
-      </RadioButton>
-
-      <RadioButton
-        name="smokingOption"
-        value="no"
-        checked={!isYesSelected}
-        onChange={() => setIsYesSelected(null)}
-      >
-        No
-      </RadioButton>
-
-      {isYesSelected && (
-        <div>
-          <p>Are you trying to quit?</p>
-          <RadioButton
-            name="quittingOption"
-            value="yes"
-            checked={isTryingToQuit === "yes"}
-            onChange={setIsTryingToQuit}
-          >
-            Yes
-          </RadioButton>
-
-          <RadioButton
-            name="quittingOption"
-            value="no"
-            checked={isTryingToQuit === "no"}
-            onChange={() => setIsTryingToQuit(null)}
-          >
-            No
-          </RadioButton>
-
-          {isTryingToQuit === "yes" && (
-            <div>
-              <p>Do you need assistance in quitting or harm reduction?</p>
-              <RadioButton
-                name="harmRedux"
-                value="yes"
-                checked={isHarmReduxYes === "yes"}
-                onChange={setIsHarmReduxYes}
-              >
-                Yes
-              </RadioButton>
-
-              <RadioButton
-                name="harmRedux"
-                value="no"
-                checked={isHarmReduxYes === "no"}
-                onChange={() => setIsHarmReduxYes(null)}
-              >
-                No
-              </RadioButton>
-            </div>
-          )}
-        </div>
-      )}
-    </div>
-  );
-}
-
-export default Smoking;
-
-import React, { useState } from "react";
-
-function Smoking() {
-  const [formData, setFormData] = useState({
-    isSmoker: null,
-    isTryingToQuit: null,
-    isHarmReduxYes: null,
-  });
-
-  const handleOptionChange = (name, value) => {
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
+    navigate("/Lifestyle");
   };
 
   return (
     <div>
-      <p>Are you a smoker?</p>
       <label>
+        First Name:
         <input
-          type="radio"
-          name="isSmoker"
-          value="yes"
-          checked={formData.isSmoker === "yes"}
-          onChange={() => handleOptionChange("isSmoker", "yes")}
+          type="text"
+          name="firstName"
+          value={patientData.firstName.value}
+          onChange={(event) =>
+            handlepatientData("firstName", event.target.value)
+          }
         />
-        Yes
-      </label>
-
-      <label>
-        <input
-          type="radio"
-          name="isSmoker"
-          value="no"
-          checked={formData.isSmoker === "no"}
-          onChange={() => handleOptionChange("isSmoker", "no")}
-        />
-        No
-      </label>
-
-      {formData.isSmoker === "yes" && (
-        <div>
-          <p>Are you trying to quit?</p>
-          <label>
-            <input
-              type="radio"
-              name="isTryingToQuit"
-              value="yes"
-              checked={formData.isTryingToQuit === "yes"}
-              onChange={() => handleOptionChange("isTryingToQuit", "yes")}
-            />
-            Yes
-          </label>
-
-          <label>
-            <input
-              type="radio"
-              name="isTryingToQuit"
-              value="no"
-              checked={formData.isTryingToQuit === "no"}
-              onChange={() => handleOptionChange("isTryingToQuit", "no")}
-            />
-            No
-          </label>
-
-          {formData.isTryingToQuit === "yes" && (
-            <div>
-              <p>Do you need assistance in quitting or harm reduction??</p>
-              <label>
-                <input
-                  type="radio"
-                  name="isHarmReduxYes"
-                  value="yes"
-                  checked={formData.isHarmReduxYes === "yes"}
-                  onChange={() => handleOptionChange("isHarmReduxYes", "yes")}
-                />
-                Yes
-              </label>
-
-              <label>
-                <input
-                  type="radio"
-                  name="isHarmReduxYes"
-                  value="no"
-                  checked={formData.isHarmReduxYes === "no"}
-                  onChange={() => handleOptionChange("isHarmReduxYes", "no")}
-                />
-                No
-              </label>
-            </div>
-          )}
-        </div>
+      </label>{" "}
+      {!patientData.firstName.isValid && (
+        <div style={{ color: "red" }}>Invalid first name!</div>
       )}
+      <br />
+      <label>
+        Last Name:
+        <input
+          type="text"
+          name="lastName"
+          value={patientData.lastName.value}
+          onChange={(event) =>
+            handlepatientData("lastName", event.target.value)
+          }
+        />
+      </label>{" "}
+      {!patientData.lastName.isValid && (
+        <div style={{ color: "red" }}>Invalid last name!</div>
+      )}
+      <br />
+      <label>
+        Date of Birth:
+        <DatePicker
+          selected={
+            patientData.dateOfBirth.value
+              ? new Date(patientData.dateOfBirth.value)
+              : new Date("01/01/1980")
+          }
+          onChange={(date) => handlepatientData("dateOfBirth", date)}
+          dateFormat="MM/dd/yyyy"
+          showYearDropdown
+          scrollableYearDropdown
+          yearDropdownItemNumber={100}
+        />
+      </label>
+      {!patientData.dateOfBirth.isValid && (
+        <div style={{ color: "red" }}>Invalid date of birth</div>
+      )}
+      <br />
+      <label>
+        Phone Number:
+        <input
+          type="text"
+          name="phoneNumber"
+          value={patientData.phoneNumber.value}
+          onChange={(event) =>
+            handlepatientData("phoneNumber", event.target.value)
+          }
+        />
+      </label>{" "}
+      {!patientData.phoneNumber.isValid && (
+        <div style={{ color: "red" }}>Invalid phone number</div>
+      )}
+      <br />
+      <label>
+        Email Address:
+        <input
+          type="text"
+          name="email"
+          value={patientData.email.value}
+          onChange={(event) => handlepatientData("email", event.target.value)}
+        />
+      </label>{" "}
+      {!patientData.email.isValid && (
+        <div style={{ color: "red" }}>Invalid email address</div>
+      )}
+      <br />
       <div>
-        <p>Form Data:</p>
-        <pre>{JSON.stringify(formData, null, 2)}</pre>
+        <button onClick={checkAllValidations}>Next</button>
       </div>
     </div>
   );
 }
-
-export default Smoking;
-
-// import React, { useState } from "react";
-
-// function Smoking() {
-//   const [isYesSelected, setIsYesSelected] = useState(null);
-//   const [isTryingToQuit, setIsTryingToQuit] = useState(null);
-//   const [isHarmReduxYes, setIsHarmReduxYes] = useState(null);
-
-//   const handleOptionChange = (value) => {
-//     setIsYesSelected(value);
-//   };
-//   const handleOtherOptionChange = (value) => {
-//     setIsTryingToQuit(value);
-//   };
-//   const handleThirdOptionChange = (value) => {
-//     setIsHarmReduxYes(value);
-//   };
-
-//   return (
-//     <div>
-//       <p>Are you a smoker?</p>
-//       <label>
-//         <input
-//           type="radio"
-//           name="smokingOption"
-//           value="yes"
-//           checked={isYesSelected === "yes"}
-//           onChange={() => handleOptionChange("yes")}
-//         />
-//         Yes
-//       </label>
-
-//       <label>
-//         <input
-//           type="radio"
-//           name="smokingOption"
-//           value="no"
-//           checked={isYesSelected === "no"}
-//           onChange={() => handleOptionChange("no")}
-//         />
-//         No
-//       </label>
-
-//       {isYesSelected === "yes" ? (
-//         <div>
-//           <p>Are you trying to quit?</p>
-//           <label>
-//             <input
-//               type="radio"
-//               name="quittingOption"
-//               value="yes"
-//               checked={isTryingToQuit === "yes"}
-//               onChange={() => handleOtherOptionChange("yes")}
-//             />
-//             Yes
-//           </label>
-
-//           <label>
-//             <input
-//               type="radio"
-//               name="quittingOption"
-//               value="no"
-//               checked={isTryingToQuit === "no"}
-//               onChange={() => handleOtherOptionChange("no")}
-//             />
-//             No
-//           </label>
-
-//           {isTryingToQuit === "yes" ? (
-//             <div>
-//               <p>Do you need assistance in quitting or harm reduction??</p>
-//               <label>
-//                 <input
-//                   type="radio"
-//                   name="harmRedux"
-//                   value="yes"
-//                   checked={isHarmReduxYes === "yes"}
-//                   onChange={() => handleThirdOptionChange("yes")}
-//                 />
-//                 Yes
-//               </label>
-
-//               <label>
-//                 <input
-//                   type="radio"
-//                   name="harmRedux"
-//                   value="no"
-//                   checked={isHarmReduxYes === "no"}
-//                   onChange={() => handleThirdOptionChange("no")}
-//                 />
-//                 No
-//               </label>
-//             </div>
-//           ) : null}
-//         </div>
-//       ) : null}
-//     </div>
-//   );
-// }
-// console.log(Smoking);
-// export default Smoking;
-
-import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
-import db from "../firebase.js";
-import { collection, addDoc } from "firebase/firestore";
-
-function Smoking() {
-  const history = useHistory(); // Initialize the useHistory hook
-
-  const [formData, setFormData] = useState({
-    isSmoker: null,
-    isTryingToQuit: null,
-    isHarmReduxYes: null,
-  });
-
-  const handleOptionChange = (name, value) => {
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
-  };
-
-  const handleSubmit = async () => {
-    // Your form submission logic
-    await addDoc(collection(db, "patient"), formData);
-
-    // Navigate to the next page after successful form submission
-    history.push("/next-page");
-  };
-
-  return (
-    <div>
-      {/* Your form JSX */}
-      <button onClick={handleSubmit}>Submit</button>
-    </div>
-  );
-}
-
-export default Smoking;
+export default Contact;

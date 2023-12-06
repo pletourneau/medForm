@@ -10,13 +10,18 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 function App() {
   const [patientData, setPatientData] = useState({
-    isSmoker: null,
-    isTryingToQuit: null,
-    isHarmReduxYes: null,
-    isDrugs: null,
-    otherDrugs: null,
-    isTryingToQuitDrugs: null,
-    isHarmReduxYesDrugs: null,
+    isSmoker: { value: "", isValid: true },
+    isTryingToQuit: { value: "", isValid: true },
+    isHarmReduxYes: { value: "", isValid: true },
+    isDrugs: { value: "", isValid: true },
+    otherDrugs: { value: "", isValid: true },
+    isTryingToQuitDrugs: { value: "", isValid: true },
+    isHarmReduxYesDrugs: { value: "", isValid: true },
+    firstName: { value: "", isValid: true },
+    lastName: { value: "", isValid: true },
+    dateOfBirth: { value: null, isValid: true },
+    phoneNumber: { value: "", isValid: true },
+    email: { value: "", isValid: true },
   });
 
   const handlePatientData = (patientData) => {
@@ -28,7 +33,16 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/Contact" element={<Contact />} />
+          <Route
+            path="/Contact"
+            element={
+              <Contact
+                patientData={patientData}
+                setPatientData={setPatientData}
+                handlePatientData={handlePatientData}
+              />
+            }
+          />
           <Route
             path="/Drugs"
             element={

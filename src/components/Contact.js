@@ -1,16 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { useNavigate } from "react-router-dom";
 
-const Contact = () => {
-  const [contactData, setContactData] = useState({
-    firstName: { value: "", isValid: true },
-    lastName: { value: "", isValid: true },
-    dateOfBirth: { value: null, isValid: true },
-    phoneNumber: { value: "", isValid: true },
-    email: { value: "", isValid: true },
-  });
+const Contact = ({ patientData, setPatientData, handlePatientData }) => {
+  const navigate = useNavigate();
 
   const validateFirstName = (value) => {
     return /^[^\d]+$/.test(value);
@@ -32,7 +26,7 @@ const Contact = () => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
   };
 
-  const handleContactData = (name, value) => {
+  const handlepatientData = (name, value) => {
     let isValid = true;
 
     switch (name) {
@@ -55,28 +49,34 @@ const Contact = () => {
         break;
     }
 
+    // setPatientData((prevData) => ({
+    //   ...prevData,
+    //   [name]: { value, isValid },
+    // }));
     if (name === "dateOfBirth") {
-      setContactData((prevData) => ({
+      setPatientData((prevData) => ({
         ...prevData,
         dateOfBirth: { value, isValid },
       }));
     } else {
-      setContactData((prevData) => ({
+      setPatientData((prevData) => ({
         ...prevData,
         [name]: { value, isValid },
       }));
     }
   };
-  const navigate = useNavigate();
-
+  // || patientData[key].value === ""
   const checkAllValidations = () => {
-    for (const key in contactData) {
-      if (!contactData[key].isValid || contactData[key].value === "") {
+    for (const key in patientData) {
+      if (!patientData[key].isValid) {
+        console.log(patientData[key].value);
         alert("Not all questions are correctly completed");
         return;
       }
     }
+    handlePatientData(patientData);
     navigate("/Lifestyle");
+    // Include additional logic if needed
   };
 
   return (
@@ -86,28 +86,28 @@ const Contact = () => {
         <input
           type="text"
           name="firstName"
-          value={contactData.firstName.value}
+          value={patientData.firstName.value}
           onChange={(event) =>
-            handleContactData("firstName", event.target.value)
+            handlepatientData("firstName", event.target.value)
           }
         />
       </label>{" "}
-      {!contactData.firstName.isValid && (
+      {!patientData.firstName.isValid && (
         <div style={{ color: "red" }}>Invalid first name!</div>
       )}
-      <br />
+      <br />{" "}
       <label>
-        Last Name:
+        Last Name:{" "}
         <input
           type="text"
           name="lastName"
-          value={contactData.lastName.value}
+          value={patientData.lastName.value}
           onChange={(event) =>
-            handleContactData("lastName", event.target.value)
+            handlepatientData("lastName", event.target.value)
           }
         />
       </label>{" "}
-      {!contactData.lastName.isValid && (
+      {!patientData.lastName.isValid && (
         <div style={{ color: "red" }}>Invalid last name!</div>
       )}
       <br />
@@ -115,18 +115,18 @@ const Contact = () => {
         Date of Birth:
         <DatePicker
           selected={
-            contactData.dateOfBirth.value
-              ? new Date(contactData.dateOfBirth.value)
+            patientData.dateOfBirth.value
+              ? new Date(patientData.dateOfBirth.value)
               : new Date("01/01/1980")
           }
-          onChange={(date) => handleContactData("dateOfBirth", date)}
+          onChange={(date) => handlepatientData("dateOfBirth", date)}
           dateFormat="MM/dd/yyyy"
           showYearDropdown
           scrollableYearDropdown
           yearDropdownItemNumber={100}
         />
       </label>
-      {!contactData.dateOfBirth.isValid && (
+      {!patientData.dateOfBirth.isValid && (
         <div style={{ color: "red" }}>Invalid date of birth</div>
       )}
       <br />
@@ -135,13 +135,13 @@ const Contact = () => {
         <input
           type="text"
           name="phoneNumber"
-          value={contactData.phoneNumber.value}
+          value={patientData.phoneNumber.value}
           onChange={(event) =>
-            handleContactData("phoneNumber", event.target.value)
+            handlepatientData("phoneNumber", event.target.value)
           }
         />
       </label>{" "}
-      {!contactData.phoneNumber.isValid && (
+      {!patientData.phoneNumber.isValid && (
         <div style={{ color: "red" }}>Invalid phone number</div>
       )}
       <br />
@@ -150,11 +150,11 @@ const Contact = () => {
         <input
           type="text"
           name="email"
-          value={contactData.email.value}
-          onChange={(event) => handleContactData("email", event.target.value)}
+          value={patientData.email.value}
+          onChange={(event) => handlepatientData("email", event.target.value)}
         />
       </label>{" "}
-      {!contactData.email.isValid && (
+      {!patientData.email.isValid && (
         <div style={{ color: "red" }}>Invalid email address</div>
       )}
       <br />
@@ -164,4 +164,5 @@ const Contact = () => {
     </div>
   );
 };
+
 export default Contact;
