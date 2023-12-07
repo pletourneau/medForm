@@ -1,0 +1,118 @@
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  position: relative;
+  /* min-height: 100vh; */
+  background-image: url(./img/background.jpeg);
+  background-size: cover;
+  /* background-position: center; */
+}
+
+.main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 150px;
+  color: black;
+}
+
+.q-container {
+  width: 50%;
+  background-color: rgba(242, 242, 242, 0.547);
+  color: black;
+  border-radius: 10px;
+}
+
+.q-container h1{
+  background-color: rgb(136, 136, 136);
+  color: white;
+  width: 100%;
+  padding: 6px;
+  text-align: center;
+  margin: 0;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  font-family: Arial, sans-serif;  
+}
+
+.home,
+.text-form,
+.summary{
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+}
+
+.text-form label {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+.text-form input,
+.text-form textarea {
+  width: 100%;
+  padding: 8px;
+  font-size: 14px;
+}
+
+.name {
+  display: flex;
+  justify-content: space-between;
+}
+
+.name label {
+  flex: 1;
+  margin-right: 10px;
+}
+
+.name input {
+  width: 100%;
+}
+
+.form-multi {
+  padding: 30px;
+  margin-bottom: 20px;
+}
+
+.form-multi p {
+  margin-bottom: 5px;
+}
+
+.form-multi label {
+  display: flex;
+  margin-bottom: 10px;
+  width: 100%; 
+}
+
+.form-multi input,
+.form-multi textarea {
+  width: 100%;
+  padding: 8px;
+  font-size: 14px;
+}
+
+.form-multi label input[type="radio"] {
+  margin-right: 8px; 
+  width: auto;  
+  font-size: 14px;
+}
+
+.nav-links {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+}
+
+.nav-links > * {
+  text-decoration: none;
+  color: #07559e;
+  font-weight: bolder;
+}
+
+button:hover {
+  background-color: #013b71;
+  color: white;
+}

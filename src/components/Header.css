@@ -1,0 +1,18 @@
+@import url('https://fonts.cdnfonts.com/css/diphylleia');
+
+.header {
+  position: fixed;
+  padding: 5px 20px;
+  height: 90px;
+  color: white;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #013b71; 
+  z-index: 999;
+}
+
+.header h1 {
+  font-family: 'Diphylleia', sans-serif;
+  font-size: 60px;
+}
