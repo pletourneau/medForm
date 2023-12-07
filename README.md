@@ -41,6 +41,7 @@ _{If you would like to start a server when UI is added, `$ npm run start`, will 
 
 ## Known Bugs
 
+- _Emoji logo in header display differently in browsers other than chrome, or chrome on Windows_
 - _please reach out as bugs are found! thepaulletourneau@gmail.com_
 
 ## License
