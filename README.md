@@ -27,8 +27,7 @@ below screenshot of work in progress
 
 ## Setup/Installation Requirements
 
-- _$ git clone (https://github.com/pletourneau/KeithsJoe.git)_
-- _$ cd keiths-joe_
+- _$ git clone_
 - _$ npm install_
 - _$ npm run build_
 - _$ npm run start (see note)_
@@ -51,4 +50,4 @@ The above copyright notice and this permission notice shall be included in all c
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-Copyright (c) _2023_ _Paul LeTourneau_
+Copyright (c) _2023_ _Paul LeTourneau and Seth Gonzales_
